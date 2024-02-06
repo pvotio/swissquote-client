@@ -34,9 +34,23 @@ class App:
         transactions = {}
         for client in self.clients:
             clientid = client["clientId"]
-            transactions[clientid] = self.client.get_transactions(clientid)
+            transactions[clientid] = self._fetch_client_transactions(clientid)
 
         self.result["transactions"] = transactions
+
+    def _fetch_client_transactions(self, clientid) -> list:
+        page = 1
+        transactions = []
+        while True:
+            resp = self.client.get_transactions(clientid, page)
+            if not resp["totalNumberOfPages"]:
+                return transactions
+
+            transactions.append(resp)
+            if resp["totalNumberOfPages"] >= resp["page"]:
+                return transactions
+
+            page += 1
 
     def fetch_clients_positions(self) -> None:
         positions = {}
