@@ -5,13 +5,13 @@ from swissquote.client import SwissQuote
 
 class App:
     def __init__(self, *args, **kwargs):
-        self.result = {}
+        self.data = {}
         self.clients = []
         self.client = SwissQuote(*args, **kwargs)
 
-    def start(self) -> dict:
+    def fetch(self) -> dict:
         self.clients = self.client.get_managed_clients()
-        self.result["clients"] = self.clients
+        self.data["clients"] = self.clients
 
         threads = []
         for func in [
@@ -28,7 +28,7 @@ class App:
         for t in threads:
             t.join()
 
-        return self.result
+        return self.data
 
     def fetch_clients_transactions(self) -> None:
         transactions = {}
@@ -36,7 +36,7 @@ class App:
             clientid = client["clientId"]
             transactions[clientid] = self._fetch_client_transactions(clientid)
 
-        self.result["transactions"] = transactions
+        self.data["transactions"] = transactions
 
     def _fetch_client_transactions(self, clientid) -> list:
         page = 1
@@ -47,7 +47,7 @@ class App:
                 return transactions
 
             transactions.append(resp)
-            if resp["totalNumberOfPages"] >= resp["page"]:
+            if resp["totalNumberOfPages"] == resp["page"]:
                 return transactions
 
             page += 1
@@ -58,7 +58,7 @@ class App:
             clientid = client["clientId"]
             positions[clientid] = self.client.get_positions(clientid)
 
-        self.result["positions"] = positions
+        self.data["positions"] = positions
 
     def fetch_clients_buyingpowers(self) -> None:
         buyingpowers = {}
@@ -67,4 +67,4 @@ class App:
             currency = client["referenceCurrency"]
             buyingpowers[clientid] = self.client.get_buyingpower(clientid, currency)
 
-        self.result["buyingpowers"] = buyingpowers
+        self.data["buyingpowers"] = buyingpowers
