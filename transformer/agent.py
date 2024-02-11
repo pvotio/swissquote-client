@@ -48,7 +48,7 @@ class Agent:
             self.add_timestamp(self.dfs[name])
 
     def _init_client_df(self):
-        if "clients" not in self.data:
+        if not self.clients:
             return
 
         self.dfs["clients"] = pd.DataFrame(self.clients)
