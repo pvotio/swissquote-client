@@ -1,0 +1,7 @@
+numpy==1.24.4
+pandas==2.0.3
+pyodbc==5.1.0
+python-dateutil==2.8.2
+python-decouple==3.8
+requests==2.31.0
+SQLAlchemy==2.0.25
