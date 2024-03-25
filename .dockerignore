@@ -2,8 +2,10 @@ __pycache__
 *.pyc
 *.pyo
 *.pyd
+*.ipynb
 .Python
 .env
+.env.sample
 venv
 pip-log.txt
 pip-delete-this-directory.txt
