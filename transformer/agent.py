@@ -15,6 +15,7 @@ class Agent:
     def transform(self) -> pd.DataFrame:
         logger.info("Starting data transformation.")
         try:
+            self.transform_staticlists()
             self.transform_transactions()
             self.transform_positions()
             self.transform_buyingpowers()
@@ -85,6 +86,48 @@ class Agent:
             merged_df = pd.merge(merged_df, sub_df, how="inner", on="client")
 
         return merged_df
+
+    def _rename_statlists_stockexchange(self, v):
+        rows = [
+            {
+                "source": "stockExchanges",
+                "code": data["stockExchange"],
+                "description": data["description"],
+                "country": data.get("country", None),
+            }
+            for data in v
+            if data
+        ]
+
+        return rows
+
+    def _rename_statlists_currencies(self, v):
+        rows = [
+            {
+                "source": "currencies",
+                "code": data["currency"],
+                "description": data.get("currencyName", None),
+            }
+            for data in v
+            if data
+        ]
+
+        return rows
+
+    def transform_staticlists(self):
+        if "staticlists" not in self.raw_data or not self.raw_data["staticlists"]:
+            return
+
+        self.data["staticlists"] = []
+        for k, v in self.raw_data["staticlists"].items():
+            if k == "stockExchanges":
+                rows = self._rename_statlists_stockexchange(v)
+            elif k == "currencies":
+                rows = self._rename_statlists_currencies(v)
+            else:
+                rows = [{"source": k, **data} for data in v if data]
+
+            self.data["staticlists"].extend(rows)
 
     def transform_transactions(self):
         if "transactions" not in self.raw_data or not self.raw_data["transactions"]:

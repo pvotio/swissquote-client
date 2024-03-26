@@ -15,6 +15,7 @@ class App:
 
         threads = []
         for func in [
+            self.fetch_staticlists,
             self.fetch_clients_buyingpowers,
             self.fetch_clients_positions,
             self.fetch_clients_transactions,
@@ -68,3 +69,6 @@ class App:
             buyingpowers[clientid] = self.client.get_buyingpower(clientid, currency)
 
         self.data["buyingpowers"] = buyingpowers
+
+    def fetch_staticlists(self):
+        self.data["staticlists"] = self.client.get_staticlists()
