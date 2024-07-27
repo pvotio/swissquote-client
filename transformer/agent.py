@@ -3,6 +3,7 @@ import datetime
 import pandas as pd
 
 from config import logger
+from transformer.columns import COLUMNS
 
 
 class Agent:
@@ -46,6 +47,9 @@ class Agent:
             if name == "securities":
                 self.dfs[name].drop_duplicates(inplace=True)
 
+            if name in COLUMNS:
+                self.dfs[name] = self.dfs[name][COLUMNS[name]]
+
             self.add_timestamp(self.dfs[name])
 
     def _init_client_df(self):
@@ -57,6 +61,7 @@ class Agent:
             columns=["positions", "transactions", "buyingPower"]
         )
         self.dfs["clients"] = self._convert_date(self.dfs["clients"], "contractStart")
+        self.dfs["clients"] = self.dfs["clients"][COLUMNS["clients"]]
         self.add_timestamp(self.dfs["clients"])
 
     def _init_buyingpowers_df(self):
