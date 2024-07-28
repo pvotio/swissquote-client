@@ -16,7 +16,7 @@ class App:
         threads = []
         for func in [
             self.fetch_staticlists,
-            self.fetch_clients_buyingpowers,
+            # self.fetch_clients_buyingpowers,
             self.fetch_clients_positions,
             self.fetch_clients_transactions,
         ]:
