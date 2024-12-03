@@ -1,5 +1,5 @@
 from config import logger, settings
-from database.helper import init_db_instance, insert_data
+from database.helper import insert_data
 from swissquote import App
 from transformer import Agent
 
@@ -16,8 +16,7 @@ def main():
     logger.info("Transforming data")
     df_transformed = Agent(data).transform()
     logger.info("Inserting data to database")
-    inserter = init_db_instance()
-    insert_data(inserter, df_transformed)
+    insert_data(df_transformed)
     logger.info("Application completed successfully")
 
 
