@@ -48,7 +48,7 @@ class Agent:
                 self.dfs[name].drop_duplicates(inplace=True)
 
             if name in COLUMNS:
-                self.dfs[name] = self.dfs[name][COLUMNS[name]]
+                self.dfs[name] = self.dfs[name].reindex(columns=COLUMNS[name])
 
             self.add_timestamp(self.dfs[name])
 
