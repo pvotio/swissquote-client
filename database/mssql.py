@@ -88,9 +88,6 @@ class MSSQLDatabase(object):
             if "timestamp" in column.lower():
                 custom[column] = "datetime"
 
-            elif df.dtypes[column] != np.int64 and df.dtypes[column] != np.float64:
-                custom[column] = "varchar(100)"
-
         try:
             fast_to_sql(
                 df=df,
